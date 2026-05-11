@@ -208,7 +208,7 @@ void deleteCurVersionKeys(simple_logger<wchar_t> &logger, bool isPerUser, const 
 {
 	CRegKey key;
 	LOG_ENTRY("deleteCurVersionKeys");
-	if(!FAILED(key.Open(isPerUser ? HKEY_CURRENT_USER : HKEY_LOCAL_MACHINE, _T("Software\\Pekora Corporation\\Pekora"), KEY_WRITE)))
+	if(!FAILED(key.Open(isPerUser ? HKEY_CURRENT_USER : HKEY_LOCAL_MACHINE, _T("Software\\Erablox Corporation\\Erablox"), KEY_WRITE)))
 	{
 		LOG_ENTRY("deleteCurVersionKeys - key Opened");
 		key.DeleteValue(buildVersionKey(component).c_str());
@@ -220,7 +220,7 @@ void setCurrentVersion(simple_logger<wchar_t> &logger, bool isPerUser, const TCH
 {
 	CRegKey key;
 	LOG_ENTRY3("setCurrentVersion - opening write registry key component=%S, version=%S, url=%S", componentCode, version, baseUrl);
-	if (ERROR_SUCCESS == key.Create(isPerUser ? HKEY_CURRENT_USER : HKEY_LOCAL_MACHINE, _T("Software\\Pekora Corporation\\Pekora")))
+	if (ERROR_SUCCESS == key.Create(isPerUser ? HKEY_CURRENT_USER : HKEY_LOCAL_MACHINE, _T("Software\\Erablox Corporation\\Erablox")))
 	{
 		std::wstring vKey = buildVersionKey(componentCode);
 		std::wstring uKey = buildUrlKey(componentCode);
@@ -241,7 +241,7 @@ void getCurrentVersion(simple_logger<wchar_t> &logger, bool isPerUser, const TCH
 	LOG_ENTRY1("getCurrentVersion - opening read registry key component=%S", componentCode);
 	version[0] = 0;
 	baseUrl[0] = 0;
-	if (ERROR_SUCCESS == key.Open(isPerUser ? HKEY_CURRENT_USER : HKEY_LOCAL_MACHINE, _T("Software\\Pekora Corporation\\Pekora"), KEY_READ))
+	if (ERROR_SUCCESS == key.Open(isPerUser ? HKEY_CURRENT_USER : HKEY_LOCAL_MACHINE, _T("Software\\Erablox Corporation\\Erablox"), KEY_READ))
 	{
 		std::wstring vKey = buildVersionKey(componentCode);
 		std::wstring uKey = buildUrlKey(componentCode);
@@ -291,7 +291,7 @@ std::wstring getQTStudioCode()
 void appendEnvironmentToProtocolScheme(std::wstring& scheme, const std::string baseUrl)
 {
 	std::vector<std::string> baseHostUrlParts = splitOn(baseUrl, '.');
-	if (baseHostUrlParts[1] != "pekora")
+	if (baseHostUrlParts[1] != "erablox")
 	{
 		scheme += convert_s2w("-" + baseHostUrlParts[1]);
 	}
@@ -299,7 +299,7 @@ void appendEnvironmentToProtocolScheme(std::wstring& scheme, const std::string b
 
 std::wstring getPlayerProtocolScheme(const std::string& baseUrl)
 {
-	std::wstring scheme = _T("pekora-player");
+	std::wstring scheme = _T("erablox-player");
 
 	appendEnvironmentToProtocolScheme(scheme, baseUrl);
 
@@ -308,7 +308,7 @@ std::wstring getPlayerProtocolScheme(const std::string& baseUrl)
 
 std::wstring getQTStudioProtocolScheme(const std::string& baseUrl)
 {
-	std::wstring scheme = _T("pekora-studio");
+	std::wstring scheme = _T("erablox-studio");
 
 	appendEnvironmentToProtocolScheme(scheme, baseUrl);
 
@@ -317,7 +317,7 @@ std::wstring getQTStudioProtocolScheme(const std::string& baseUrl)
 
 std::wstring getStudioRegistrySubPath()
 {
-	return _T("StudioPekoraReg");
+	return _T("StudioErabloxReg");
 }
 
 std::wstring getStudioRegistryPath()
@@ -456,7 +456,7 @@ void updateExistingRobloxShortcuts(
 				bool isMFCStudio = (StrCmp(exeName, _T(STUDIOBOOTSTAPPERNAME)) == 0); // true if we're updating for MFC studio
 				LOG_ENTRY1("updateExistingRobloxShortcuts isStudio = %d", isMFCStudio);
 
-				if (StrStr(foundFilePath, _T("Pekora.exe")))
+				if (StrStr(foundFilePath, _T("Erablox.exe")))
 				{
 					// this shortcut points to the player
 					TCHAR args[MAX_PATH];
