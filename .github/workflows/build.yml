@@ -68,21 +68,21 @@ jobs:
         
     - name: Verify Executables Exist
       run: |
-        $x86Exists = Test-Path "BootstrapperClient\bin\Release\Win32\PekoraPlayerLauncher.exe"
-        $x64Exists = Test-Path "BootstrapperClient\bin\Release\x64\PekoraPlayerLauncher.exe"
+        $x86Exists = Test-Path "BootstrapperClient\bin\Release\Win32\ErabloxPlayerLauncher.exe"
+        $x64Exists = Test-Path "BootstrapperClient\bin\Release\x64\ErabloxPlayerLauncher.exe"
 
         if ($x86Exists) {
-          Write-Host "PekoraPlayerLauncher.exe (x86) built successfully!"
-          Get-Item "BootstrapperClient\bin\Release\Win32\PekoraPlayerLauncher.exe" | Select-Object Name, Length, LastWriteTime
+          Write-Host "ErabloxPlayerLauncher.exe (x86) built successfully!"
+          Get-Item "BootstrapperClient\bin\Release\Win32\ErabloxPlayerLauncher.exe" | Select-Object Name, Length, LastWriteTime
         } else {
-          Write-Host "PekoraPlayerLauncher.exe (x86) not found!"
+          Write-Host "ErabloxPlayerLauncher.exe (x86) not found!"
         }
 
         if ($x64Exists) {
-          Write-Host "PekoraPlayerLauncher.exe (x64) built successfully!"
-          Get-Item "BootstrapperClient\bin\Release\x64\PekoraPlayerLauncher.exe" | Select-Object Name, Length, LastWriteTime
+          Write-Host "ErabloxPlayerLauncher.exe (x64) built successfully!"
+          Get-Item "BootstrapperClient\bin\Release\x64\ErabloxPlayerLauncher.exe" | Select-Object Name, Length, LastWriteTime
         } else {
-          Write-Host "PekoraPlayerLauncher.exe (x64) not found!"
+          Write-Host "ErabloxPlayerLauncher.exe (x64) not found!"
         }
 
         if (-not $x86Exists -and -not $x64Exists) {
@@ -94,29 +94,29 @@ jobs:
     - name: Upload Build Artifacts (x86)
       uses: actions/upload-artifact@v4
       with:
-        name: PekoraPlayerLauncher-x86-Release
+        name: ErabloxPlayerLauncher-x86-Release
         path: |
-          BootstrapperClient\bin\Release\Win32\PekoraPlayerLauncher.exe
+          BootstrapperClient\bin\Release\Win32\ErabloxPlayerLauncher.exe
         retention-days: 30
 
     - name: Upload Build Artifacts (x64)
       uses: actions/upload-artifact@v4
       with:
-        name: PekoraPlayerLauncher-x64-Release
+        name: ErabloxPlayerLauncher-x64-Release
         path: |
-          BootstrapperClient\bin\Release\x64\PekoraPlayerLauncher.exe
+          BootstrapperClient\bin\Release\x64\ErabloxPlayerLauncher.exe
         retention-days: 30
         
     - name: Create Release Package (x86)
       if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
       run: |
-        $zipName = "PekoraPlayerLauncher-x86.zip"
+        $zipName = "ErabloxPlayerLauncher-x86.zip"
 
         # Create a temporary directory for packaging
         New-Item -ItemType Directory -Path "release-package-x86" -Force
 
         # Copy the executable
-        Copy-Item "BootstrapperClient\bin\Release\Win32\PekoraPlayerLauncher.exe" "release-package-x86\"
+        Copy-Item "BootstrapperClient\bin\Release\Win32\ErabloxPlayerLauncher.exe" "release-package-x86\"
 
         # Create the zip file
         Compress-Archive -Path "release-package-x86\*" -DestinationPath $zipName -Force
@@ -127,13 +127,13 @@ jobs:
     - name: Create Release Package (x64)
       if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
       run: |
-        $zipName = "PekoraPlayerLauncher-x64.zip"
+        $zipName = "ErabloxPlayerLauncher-x64.zip"
 
         # Create a temporary directory for packaging
         New-Item -ItemType Directory -Path "release-package-x64" -Force
 
         # Copy the executable
-        Copy-Item "BootstrapperClient\bin\Release\x64\PekoraPlayerLauncher.exe" "release-package-x64\"
+        Copy-Item "BootstrapperClient\bin\Release\x64\ErabloxPlayerLauncher.exe" "release-package-x64\"
 
         # Create the release package
         Compress-Archive -Path "release-package-x64\*" -DestinationPath $zipName -Force
@@ -146,7 +146,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Release-Package-x86
-        path: "PekoraPlayerLauncher-x86.zip"
+        path: "ErabloxPlayerLauncher-x86.zip"
         retention-days: 90
 
     - name: Upload Release Package (x64)
@@ -154,7 +154,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Release-Package-x64
-        path: "PekoraPlayerLauncher-x64.zip"
+        path: "ErabloxPlayerLauncher-x64.zip"
         retention-days: 90
 
     - name: Create GitHub Release
@@ -164,10 +164,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v1.7.0.4
-        release_name: "Release 1.7.0.4"
+        tag_name: v1.0.0.0
+        release_name: "Release 1.0.0.0"
         body: |
-          ## Release 1.7.0.4
+          ## Release 1.0.0.0
 
           **Build Date:** ${{ github.event.head_commit.timestamp }}
           **Commit:** ${{ github.sha }}
@@ -180,8 +180,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: PekoraPlayerLauncher-x86.zip
-        asset_name: PekoraPlayerLauncher-x86.zip
+        asset_path: ErabloxPlayerLauncher-x86.zip
+        asset_name: ErabloxPlayerLauncher-x86.zip
         asset_content_type: application/zip
 
     - name: Upload Release Asset (x64)
@@ -191,6 +191,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: PekoraPlayerLauncher-x64.zip
-        asset_name: PekoraPlayerLauncher-x64.zip
+        asset_path: ErabloxPlayerLauncher-x64.zip
+        asset_name: ErabloxPlayerLauncher-x64.zip
         asset_content_type: application/zip
