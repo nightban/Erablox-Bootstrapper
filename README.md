@@ -1,8 +1,6 @@
-# Korone Bootstrapper
+# Erablox Bootstrapper
 
-This repository contains the source code for the [Korone Bootstrapper](https://pekora.zip).
-
-We are open sourcing this project to demonstrate transparency. Some users have mistakenly labeled Korone as a **RAT (Remote Access Trojan)** this code proves that the bootstrapper is completely safe.
+This repository contains the source code for the [Erablox Bootstrapper](https://erablox.zip).
 
 ---
 
