@@ -23,13 +23,13 @@
 #include "RobloxServicesTools.h"
 #include <VersionHelpers.h>
 
-static const TCHAR* BootstrapperFileName    = _T("PekoraPlayerLauncher.exe");
+static const TCHAR* BootstrapperFileName    = _T("ErabloxPlayerLauncher.exe");
 static const TCHAR* RobloxAppFileName		= _T(PLAYEREXENAME);
-static const TCHAR* BootstrapperMutexName   = _T("www.pekora.zip/bootstrapper");
-static const TCHAR* StartRobloxAppMutex     = _T("www.pekora.zip/startRobloxApp");
-static const TCHAR* LauncherFileName        = _T("PekoraProxy.dll");
-static const TCHAR* LauncherFileName64      = _T("PekoraProxy64.dll");
-static const TCHAR* FriendlyName            = _T("Korone");
+static const TCHAR* BootstrapperMutexName   = _T("www.erablox.zip/bootstrapper");
+static const TCHAR* StartRobloxAppMutex     = _T("www.erablox.zip/startRobloxApp");
+static const TCHAR* LauncherFileName        = _T("ErabloxProxy.dll");
+static const TCHAR* LauncherFileName64      = _T("ErabloxProxy64.dll");
+static const TCHAR* FriendlyName            = _T("Erablox");
 static const TCHAR* CLSID_Launcher          = _T("{76D50904-6780-4c8b-8986-1A7EE0B1716D}");
 static const TCHAR* CLSID_Launcher64        = _T("{DEE03C2B-0C0C-41A9-9877-FD4B4D7B6EA3}");
 static const TCHAR* AppID_Launcher          = _T("{664B192B-D17A-4921-ABF9-C6F6264E5110}");
@@ -67,7 +67,7 @@ BootstrapperClient::BootstrapperClient(HINSTANCE hInstance)
 
 	//Plugin depends on RobloxReg value as well, 
 	//so if you ever change this guy make sure that plugins code is updates as well
-	_regSubPath = L"PekoraReg";
+	_regSubPath = L"ErabloxReg";
 	_regPath = L"SOFTWARE\\" + _regSubPath;
 	_versionFileName = L"ProjectXVersion.txt";
 	_versionGuidName = _T(VERSIONGUIDNAMEPLAYER);
@@ -471,7 +471,7 @@ bool BootstrapperClient::NeedPreDeployRun()
 	}
 
 	CRegKey key;
-	if (SUCCEEDED(key.Open(HKEY_CURRENT_USER, _T("Software\\Pekora Corporation\\Pekora"), KEY_READ)))
+	if (SUCCEEDED(key.Open(HKEY_CURRENT_USER, _T("Software\\Erablox Corporation\\Erablox"), KEY_READ)))
 	{
 		TCHAR buf[MAX_PATH];
 		ULONG bufSize = MAX_PATH;
@@ -523,7 +523,7 @@ void BootstrapperClient::RunPreDeploy()
 		DeployComponents(true, false);
 
 		CRegKey key;
-		if (SUCCEEDED(key.Create(HKEY_CURRENT_USER, _T("Software\\Pekora Corporation\\Pekora"))))
+		if (SUCCEEDED(key.Create(HKEY_CURRENT_USER, _T("Software\\Erablox Corporation\\Erablox"))))
 		{
 			key.SetStringValue(_T("LastPreVersion"), convert_s2w(preVersion).c_str());
 			LOG_ENTRY("Setting last pre deploy version entry");
@@ -682,7 +682,7 @@ void BootstrapperClient::StartRobloxApp(bool fromInstall)
 	CTimedMutexLock lock(mutex);
 	while (lock.Lock(1) == WAIT_TIMEOUT )
 	{
-		LOG_ENTRY("Another process is starting Pekora. Abandoning startRobloxApp");
+		LOG_ENTRY("Another process is starting Erablox. Abandoning startRobloxApp");
 		return;
 	}
 
@@ -690,10 +690,10 @@ void BootstrapperClient::StartRobloxApp(bool fromInstall)
 
 	setStage(10);
 
-	message("Starting Pekora...");
+	message("Starting Erablox...");
 
 	LOG_ENTRY("Creating event");
-	CEvent robloxStartedEvent(NULL, TRUE, FALSE, _T("www.pekora.zip/robloxStartedEvent"));
+	CEvent robloxStartedEvent(NULL, TRUE, FALSE, _T("www.erablox.zip/robloxStartedEvent"));
 	LOG_ENTRY("Resetting event");
 	robloxStartedEvent.Reset();
 
@@ -999,7 +999,7 @@ void BootstrapperClient::deployRobloxProxy(bool commitData)
 
 		// For IE8:
 		auto allowedDomainsKey = CreateKey(key, _T("AllowedDomains"));
-		CreateKey(allowedDomainsKey->m_hKey, _T("pekora.zip"));
+		CreateKey(allowedDomainsKey->m_hKey, _T("erablox.zip"));
 		CreateKey(allowedDomainsKey->m_hKey, _T("robloxlabs.com"));
 	}
 
@@ -1038,8 +1038,8 @@ void BootstrapperClient::registerFirefoxPlugin(const TCHAR* id, bool is64Bits)
 	auto key = CreateKey(parent, format_string(_T("SOFTWARE\\MozillaPlugins\\%s"), id).c_str(), NULL, is64Bits);
 
 	key->SetStringValue(_T("ProductName"), _T("Launcher"));
-	key->SetStringValue(_T("Description"), _T("Pekora Launcher"));
-	key->SetStringValue(_T("Vendor"), _T("Pekora"));
+	key->SetStringValue(_T("Description"), _T("Erablox Launcher"));
+	key->SetStringValue(_T("Vendor"), _T("Erablox"));
 	key->SetStringValue(_T("Version"), _T("1"));
 
 	if (is64Bits)
@@ -1297,4 +1297,3 @@ bool BootstrapperClient::PerModeLoggingEnabled() {
 bool BootstrapperClient::UseNewCdn() {
 	return settings.GetValueUseNewCdn();
 }
-
